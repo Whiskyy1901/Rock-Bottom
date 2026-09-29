@@ -1,0 +1,14 @@
+C:\Users\Ishant\Documents\Text RPG\bin\Debug\net10.0\Text RPG.exe
+C:\Users\Ishant\Documents\Text RPG\bin\Debug\net10.0\Text RPG.deps.json
+C:\Users\Ishant\Documents\Text RPG\bin\Debug\net10.0\Text RPG.runtimeconfig.json
+C:\Users\Ishant\Documents\Text RPG\bin\Debug\net10.0\Text RPG.dll
+C:\Users\Ishant\Documents\Text RPG\bin\Debug\net10.0\Text RPG.pdb
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.AssemblyInfoInputs.cache
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.AssemblyInfo.cs
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.csproj.CoreCompileInputs.cache
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.dll
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\refint\Text RPG.dll
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.pdb
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\Text RPG.genruntimeconfig.cache
+C:\Users\Ishant\Documents\Text RPG\obj\Debug\net10.0\ref\Text RPG.dll
