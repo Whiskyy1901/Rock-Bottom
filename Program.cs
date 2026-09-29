@@ -1,12 +1,18 @@
 ﻿using System;
 
 namespace RPG{
-    class Program
+    public class Program
     {  
         public static Player player = new Player();
+        public static bool mainLoop = true;
         static void Main(string[] args)
         {
             Start();
+            Encounters.FirstEncounter();
+            while (mainLoop)
+            {
+                Encounters.RandomEncounter();
+            }
         }
 
         static void Start()
