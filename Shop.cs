@@ -27,30 +27,30 @@ namespace RPG
                 healC = 30 + 10*player.mods;
                 diffC = 500 * player.mods;
                 Console.Clear();
-                Console.WriteLine("             Shop             ");
-                Console.WriteLine("==============================");
-                Console.WriteLine("|  Item                Price |");
-                Console.WriteLine("|(A)rmour                 "+armourC+"|");
-                Console.WriteLine("|(W)eapon                 "+weaponC+"|");
-                Console.WriteLine("|(H)eals                  "+healC+"|");
-                Console.WriteLine("|(D)ifficulty increase    "+diffC+"|");
-                Console.WriteLine("==============================");
-                Console.WriteLine("            (E)xit            ");
-                Console.WriteLine("         (Q)uit Game          ");
+                Program.Print("             Shop             ");
+                Program.Print("==============================");
+                Program.Print("|  Item                Price |");
+                Program.Print("|(A)rmour                 "+armourC+"|");
+                Program.Print("|(W)eapon                 "+weaponC+"|");
+                Program.Print("|(H)eals                  "+healC+"|");
+                Program.Print("|(D)ifficulty increase    "+diffC+"|");
+                Program.Print("==============================");
+                Program.Print("            (E)xit            ");
+                Program.Print("         (Q)uit Game          ");
 
 
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("         Player Stats         ");
-                Console.WriteLine("==============================");
-                Console.WriteLine("Coins: "+player.coins);
+                Program.Print("         Player Stats         ");
+                Program.Print("==============================");
+                Program.Print("Coins: "+player.coins);
 
-                Console.WriteLine("Armour: "+player.armour);
-                Console.WriteLine("Weapon Damage: "+player.damage);
-                Console.WriteLine("Heals: "+player.heals);
-                Console.WriteLine("Difficulty modifiers: "+player.mods);
-                Console.WriteLine("==============================");
+                Program.Print("Armour: "+player.armour);
+                Program.Print("Weapon Damage: "+player.damage);
+                Program.Print("Heals: "+player.heals);
+                Program.Print("Difficulty modifiers: "+player.mods);
+                Program.Print("==============================");
 
                 string input = Console.ReadLine().ToLower();
                 if(input == "a")
@@ -97,8 +97,8 @@ namespace RPG
             }
             else
             {
-                Console.WriteLine("You can't afford this.");
-                Console.WriteLine("Can somebody get these BEGGARS out of here");
+                Program.Print("You can't afford this.");
+                Program.Print("Can somebody get these BEGGARS out of here");
                 Console.ReadKey();
             }
         }

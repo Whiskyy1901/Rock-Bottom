@@ -7,9 +7,9 @@ namespace RPG
         static Random rand = new Random();
         public static void FirstEncounter()
         {
-            Console.WriteLine("Outside the cave, you see a man with a wooden club.");
-            Console.WriteLine("You assume that must be the man that bruised you.");
-            Console.WriteLine("You pickup the nearest rock and charge towards him.");
+            Program.Print("Outside the cave, you see a man with a wooden club.");
+            Program.Print("You assume that must be the man that bruised you.");
+            Program.Print("You pickup the nearest rock and charge towards him.");
             Console.ReadKey();
             Combat(false, "Caveman", 2, 2);
         }
@@ -17,7 +17,7 @@ namespace RPG
         public static void RandomFight()
         {
             Console.Clear();
-            Console.WriteLine("You walk around a tree and are faced with a BEAST...");
+            Program.Print("You walk around a tree and are faced with a BEAST...");
             Console.ReadKey();
             Combat(true,"",0,0);
         }
@@ -53,37 +53,37 @@ namespace RPG
             while (health > 0)
             {
                 Console.Clear();
-                Console.WriteLine(name);
-                Console.WriteLine(power+"/"+health);
-                Console.WriteLine("---------------------------");
-                Console.WriteLine("|  (A)ttack     (D)efend  |");
-                Console.WriteLine("|  (R)un        (H)eal    |");
-                Console.WriteLine("---------------------------");
-                Console.WriteLine("  Heals: "+Program.player.heals+"  Health: "+Program.player.health);
+                Program.Print(name, 10);
+                Program.Print(power+"/"+health, 10);
+                Program.Print("---------------------------", 10);
+                Program.Print("|  (A)ttack     (D)efend  |", 10);
+                Program.Print("|  (R)un        (H)eal    |", 10);
+                Program.Print("---------------------------", 10);
+                Program.Print("  Heals: "+Program.player.heals+"  Health: "+Program.player.health, 10);
 
                 string input = Console.ReadLine();
 
                 if(input.ToLower() == "a")
                 {
                     //Attack
-                    Console.WriteLine("You rush forwards with your rock and attack. As you do, the "+name+" strikes you back.");
+                    Program.Print("You rush forwards with your rock and attack. As you do, the "+name+" strikes you back.");
                     int damage = rand.Next(1, Program.player.damage);
                     int incomming = power - Program.player.armour;
                     if(incomming <=0)
                         incomming = 0;
-                    Console.WriteLine("You deal "+damage+" damage and lose "+incomming+" health.");
+                    Program.Print("You deal "+damage+" damage and lose "+incomming+" health.");
                     Program.player.health -= incomming;
                     health -= damage;
                 } 
                 else if(input.ToLower() == "d")
                 {
                     //Defend
-                    Console.WriteLine("As the "+name+" prepares to attack, you take a defensive stance with your rock");
+                    Program.Print("As the "+name+" prepares to attack, you take a defensive stance with your rock");
                     int damage = rand.Next(1, Program.player.damage)/2;
                     int incomming = (power/3) - Program.player.armour;
                     if(incomming <=0)
                         incomming = 0;
-                    Console.WriteLine("You deal "+damage+" damage and lose "+incomming+" health.");
+                    Program.Print("You deal "+damage+" damage and lose "+incomming+" health.");
                     Program.player.health -= incomming;
                     health -= damage;
                 } 
@@ -93,13 +93,13 @@ namespace RPG
                     int isEscape = rand.Next(0,3);
                     if(isEscape == 0)
                     {
-                        Console.WriteLine("You try to run away but trip and fall.");
+                        Program.Print("You try to run away but trip and fall.");
                         Program.player.health -= 1;
-                        Console.WriteLine("You take 1 damage.");
+                        Program.Print("You take 1 damage.");
                     }
                     else
                     {
-                        Console.WriteLine("You awaken your inner Usain Bolt and successfully run away.");
+                        Program.Print("You awaken your inner Usain Bolt and successfully run away.");
                         Console.Write("Coawadice increased.");
                         Console.ReadKey();
                         Shop.LoadShop(Program.player);
@@ -109,18 +109,18 @@ namespace RPG
                 {
                     if(Program.player.heals == 0)
                     {
-                        Console.WriteLine("You reach into your pocket but to your horror, you do not have heals.");
+                        Program.Print("You reach into your pocket but to your horror, you do not have heals.");
                         int incomming = power - Program.player.armour;
                         if(incomming <=0)
                             incomming = 0;
-                        Console.WriteLine("You lose "+incomming+" health.");
+                        Program.Print("You lose "+incomming+" health.");
                         Program.player.health -= incomming;
                     }
                     else
                     {
-                        Console.WriteLine("You reach into your pocket and drink a bottle of unknown sustance.");
+                        Program.Print("You reach into your pocket and drink a bottle of unknown sustance.");
                         int healValue = 2;
-                        Console.WriteLine("You gain "+healValue+" health.");
+                        Program.Print("You gain "+healValue+" health.");
                         Program.player.health += healValue;
                         Program.player.heals -= 1;
                     }
@@ -129,7 +129,7 @@ namespace RPG
                 {
                     if (Program.player.health <= 0)
                     {
-                        Console.WriteLine("As the "+name+" stand above you and deals the final blow. You have been slayn by the MIGHTY "+name+".");
+                        Program.Print("As the "+name+" stand above you and deals the final blow. You have been slayn by the MIGHTY "+name+".", 100);
                         Program.player.isDead = true;
                         Program.Save();
                         Console.ReadKey();
@@ -139,16 +139,16 @@ namespace RPG
                 Console.ReadKey();
             }
             int coins = Program.player.GetCoins();
-            Console.WriteLine("As you stand victorious over your the "+name+", it's body dissolves into an unknown substance.");
+            Program.Print("As you stand victorious over the "+name+", it's body dissolves into an unknown substance.", 80);
             if (rand.Next(0, 10) == 1)    
             {
-                Console.WriteLine("You put the unknown substance in a bottle.");
+                Program.Print("You put the unknown substance in a bottle., 100");
                 Program.player.heals +=1;
-                Console.WriteLine("You gain 1 heal.");
+                Program.Print("You gain 1 heal.", 100);
             }
-            Console.WriteLine("You gain "+coins+" coins.");
+            Program.Print("You gain "+coins+" coins.");
             Program.player.coins += coins;
-            Console.WriteLine("You now have "+Program.player.coins+" coins.");
+            Program.Print("You now have "+Program.player.coins+" coins.");
             Console.ReadKey();
         }
 

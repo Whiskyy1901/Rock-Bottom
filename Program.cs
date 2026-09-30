@@ -57,19 +57,19 @@ namespace RPG
         static void Start()
         {
             Console.Clear();
-            Console.WriteLine("Game Name");
-            Console.WriteLine("What is your name?");
+            Program.Print("Game Name");
+            Program.Print("What is your name?");
             player.name = Console.ReadLine() ?? "";
             Console.Clear();
-            Console.WriteLine("You wakeup in your cave, bruised.");
+            Program.Print("You wakeup in your cave, bruised.");
             if (player.name == "")
-                Console.WriteLine("You don't even remember you own name....");
+                Program.Print("You don't even remember you own name....");
             else
-                Console.WriteLine("You remember only your name; " + player.name);
+                Program.Print("You remember only your name; " + player.name);
             Console.ReadKey();
             Console.Clear();
-            Console.WriteLine("You see the sunlight, lighting your cave.");
-            Console.WriteLine("You go out to explore.");
+            Program.Print("You see the sunlight, lighting your cave.");
+            Program.Print("You go out to explore.");
         }
 
         public static void Save()
@@ -94,11 +94,11 @@ namespace RPG
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Select your player");
+                Program.Print("Select your player");
                 foreach (Player p in players)
-                    Console.WriteLine(p.id + ": " + p.name + (p.isDead ? " (dead)" : ""));               
+                    Program.Print(p.id + ": " + p.name + (p.isDead ? " (dead)" : ""));               
                 Console.WriteLine();
-                Console.WriteLine("Enter player id, or type \"new\" to start a new game");
+                Program.Print("Enter player id, or type \"new\" to start a new game");
 
                 string? data = Console.ReadLine()?.Trim();
                 if (string.Equals(data, "new", StringComparison.OrdinalIgnoreCase))
@@ -111,7 +111,7 @@ namespace RPG
                         if (p.isDead)
                         {
                             Console.WriteLine();
-                            Console.WriteLine(p.name + " could not make it to the end. Their story is over.");
+                            Program.Print(p.name + " could not make it to the end. Their story is over.");
                             Console.ReadKey();
                             break;
                         }
@@ -125,6 +125,16 @@ namespace RPG
         {
             Save();
             Environment.Exit(0);
+        }
+
+        public static void Print(string text, int speed = 40)
+        {
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                System.Threading.Thread.Sleep(speed);
+            }
+            Console.WriteLine();
         }
     }
 }
