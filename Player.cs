@@ -2,13 +2,15 @@ using System;
 
 namespace RPG
 {
+    [Serializable]
     public class Player
     {
         Random rand = new Random();
 
         public string name;
+        public int id;
         public int health = 10;
-        public int coins = 10000;
+        public int coins = 0;
         public int damage = 1;
         public int armour = 0;
         public int heals = 3;
