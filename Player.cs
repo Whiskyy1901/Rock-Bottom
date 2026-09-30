@@ -9,6 +9,7 @@ namespace RPG
 
         public string name;
         public int id;
+        public bool isDead = false;
         public int health = 10;
         public int coins = 0;
         public int damage = 1;

@@ -36,6 +36,7 @@ namespace RPG
                 Console.WriteLine("|(D)ifficulty increase    "+diffC+"|");
                 Console.WriteLine("==============================");
                 Console.WriteLine("            (E)xit            ");
+                Console.WriteLine("         (Q)uit Game          ");
 
 
                 Console.WriteLine();
@@ -67,6 +68,10 @@ namespace RPG
                 else if(input == "d")
                 {
                     Buy("Difficulty", diffC, player);
+                }
+                else if(input == "q")
+                {
+                    Program.Quit();
                 }
                 else if(input == "e")
                 {

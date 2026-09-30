@@ -127,9 +127,14 @@ namespace RPG
                 }
                 if (Program.player.health <= 0)
                 {
-                    Console.WriteLine("As the "+name+" stand above you and deals the final blow. You have been slayn by the MIGHTY "+name+".");
-                    Console.ReadKey();
-                    System.Environment.Exit(0);
+                    if (Program.player.health <= 0)
+                    {
+                        Console.WriteLine("As the "+name+" stand above you and deals the final blow. You have been slayn by the MIGHTY "+name+".");
+                        Program.player.isDead = true;
+                        Program.Save();
+                        Console.ReadKey();
+                        System.Environment.Exit(0);
+                    }
                 }
                 Console.ReadKey();
             }

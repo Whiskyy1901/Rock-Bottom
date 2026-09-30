@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 
@@ -95,7 +96,7 @@ namespace RPG
                 Console.Clear();
                 Console.WriteLine("Select your player");
                 foreach (Player p in players)
-                    Console.WriteLine(p.id + ": " + p.name);
+                    Console.WriteLine(p.id + ": " + p.name + (p.isDead ? " (dead)" : ""));               
                 Console.WriteLine();
                 Console.WriteLine("Enter player id, or type \"new\" to start a new game");
 
@@ -106,9 +107,24 @@ namespace RPG
                 foreach (Player p in players)
                 {
                     if (p.id.ToString() == data)
+                    {
+                        if (p.isDead)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine(p.name + " could not make it to the end. Their story is over.");
+                            Console.ReadKey();
+                            break;
+                        }
                         return p;
+                    }
                 }
             }
+        }
+
+        public static void Quit()
+        {
+            Save();
+            Environment.Exit(0);
         }
     }
 }
