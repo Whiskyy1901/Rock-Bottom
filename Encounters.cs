@@ -95,13 +95,14 @@ namespace RPG
                     {
                         Console.WriteLine("You try to run away but trip and fall.");
                         Program.player.health -= 1;
-                        Console.WriteLine("You take 1 damage and are now at "+Program.player.health+" health.");
+                        Console.WriteLine("You take 1 damage.");
                     }
                     else
                     {
                         Console.WriteLine("You awaken your inner Usain Bolt and successfully run away.");
                         Console.Write("Coawadice increased.");
-                        //Go to shop
+                        Console.ReadKey();
+                        Shop.LoadShop(Program.player);
                     }
                 } 
                 else if(input.ToLower() == "h")
@@ -132,9 +133,9 @@ namespace RPG
                 }
                 Console.ReadKey();
             }
-            int coins = rand.Next(10, 20);
+            int coins = Program.player.GetCoins();
             Console.WriteLine("As you stand victorious over your the "+name+", it's body dissolves into an unknown substance.");
-            if (rand.Next(0, 10) == 0)    
+            if (rand.Next(0, 10) == 1)    
             {
                 Console.WriteLine("You put the unknown substance in a bottle.");
                 Program.player.heals +=1;
