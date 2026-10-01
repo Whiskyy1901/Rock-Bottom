@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 
 namespace RPG
 {
     public class Program
     {
+        public const string GameTitle = "ROCK BOTTOM";
+
         public static Player player = new Player();
         public static bool mainLoop = true;
 
@@ -19,27 +21,104 @@ namespace RPG
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.Title = GameTitle;
+
             if (!Directory.Exists("Saves"))
                 Directory.CreateDirectory("Saves");
+
+            TitleScreen();
 
             Player? loaded = PlayerLoad();
             if (loaded != null)
             {
-                player = loaded;                // continue the saved game
+                player = loaded;
+                if (player.health > player.maxHealth)
+                    player.health = player.maxHealth;
             }
             else
             {
-                player.id = NextPlayerId();     // fresh id for the new game
+                player.id = NextPlayerId();
                 Start();
                 Encounters.FirstEncounter();
                 Save();
             }
 
+            MainMenu();
+        }
+
+        static void TitleScreen()
+        {
+            Console.Clear();
+            string line = new string('=', GameTitle.Length + 12);
+            Console.WriteLine();
+            PrintColor("   " + line, ConsoleColor.Yellow, 5);
+            PrintColor("   ===  " + GameTitle + "  ===", ConsoleColor.Yellow, 40);
+            PrintColor("   " + line, ConsoleColor.Yellow, 5);
+            Console.WriteLine();
+            PrintColor("        a caveman adventure", ConsoleColor.DarkYellow, 30);
+            Console.WriteLine();
+            Console.WriteLine();
+            Pause();
+        }
+
+        static void MainMenu()
+        {
             while (mainLoop)
             {
-                Encounters.RandomEncounter();
-                Save();
+                Console.Clear();
+                bool lairOpen = player.storyStage >= 3 && !player.hasWon;
+
+                PrintColor("=== THE WILDS ===", ConsoleColor.Cyan, 5);
+                Print(player.name + "   Lv " + player.level + "   HP " + player.health + "/" + player.maxHealth
+                    + "   Coins " + player.coins + "   XP " + player.xp + "/" + player.XpToNext(), 5);
+                Console.WriteLine();
+                Print("(E)xplore    (R)est    (C)amp shop", 5);
+                if (lairOpen)
+                    PrintColor("(L)air of the T-Rex", ConsoleColor.Magenta, 5);
+                Print("(T)ext speed: " + SpeedLabel() + "    (Q)uit", 5);
+
+                string input = (Console.ReadLine() ?? "").Trim().ToLower();
+                switch (input)
+                {
+                    case "e":
+                        Encounters.RandomEncounter();
+                        Encounters.StoryBeat();
+                        Save();
+                        break;
+                    case "r":
+                        Encounters.Rest();
+                        Save();
+                        break;
+                    case "c":
+                        Shop.LoadShop(player);
+                        Save();
+                        break;
+                    case "l":
+                        if (lairOpen)
+                        {
+                            Encounters.BossFight();
+                            Save();
+                        }
+                        break;
+                    case "t":
+                        player.textSpeed = (player.textSpeed + 1) % 3;
+                        break;
+                    case "q":
+                        Quit();
+                        break;
+                }
             }
+        }
+
+        static string SpeedLabel()
+        {
+            return player.textSpeed switch
+            {
+                1 => "Fast",
+                2 => "Instant",
+                _ => "Normal"
+            };
         }
 
         static int NextPlayerId()
@@ -57,19 +136,18 @@ namespace RPG
         static void Start()
         {
             Console.Clear();
-            Program.Print("Game Name");
-            Program.Print("What is your name?");
+            Print("What is your name?");
             player.name = Console.ReadLine() ?? "";
             Console.Clear();
-            Program.Print("You wakeup in your cave, bruised.");
+            Print("You wakeup in your cave, bruised.");
             if (player.name == "")
-                Program.Print("You don't even remember you own name....");
+                Print("You don't even remember you own name....");
             else
-                Program.Print("You remember only your name; " + player.name);
-            Console.ReadKey();
+                Print("You remember only your name; " + player.name);
+            Pause();
             Console.Clear();
-            Program.Print("You see the sunlight, lighting your cave.");
-            Program.Print("You go out to explore.");
+            Print("You see the sunlight, lighting your cave.");
+            Print("You go out to explore.");
         }
 
         public static void Save()
@@ -89,16 +167,20 @@ namespace RPG
             }
 
             if (players.Count == 0)
-                return null;                    // no saves, go straight to a new game
+                return null;
 
             while (true)
             {
                 Console.Clear();
-                Program.Print("Select your player");
+                Print("Select your player", 10);
                 foreach (Player p in players)
-                    Program.Print(p.id + ": " + p.name + (p.isDead ? " (dead)" : ""));               
+                {
+                    string status = p.isDead ? " (dead)" : p.hasWon ? " (victorious)" : "";
+                    PrintColor(p.id + ": " + p.name + "  Lv " + p.level + status,
+                        p.isDead ? ConsoleColor.DarkGray : p.hasWon ? ConsoleColor.Yellow : ConsoleColor.White, 10);
+                }
                 Console.WriteLine();
-                Program.Print("Enter player id, or type \"new\" to start a new game");
+                Print("Enter player id, or type \"new\" to start a new game", 10);
 
                 string? data = Console.ReadLine()?.Trim();
                 if (string.Equals(data, "new", StringComparison.OrdinalIgnoreCase))
@@ -111,8 +193,8 @@ namespace RPG
                         if (p.isDead)
                         {
                             Console.WriteLine();
-                            Program.Print(p.name + " could not make it to the end. Their story is over.");
-                            Console.ReadKey();
+                            Print(p.name + " could not make it to the end. Their story is over.");
+                            Pause();
                             break;
                         }
                         return p;
@@ -129,11 +211,57 @@ namespace RPG
 
         public static void Print(string text, int speed = 40)
         {
+            int delay = player.textSpeed switch
+            {
+                1 => speed / 4,
+                2 => 0,
+                _ => speed
+            };
+
             foreach (char c in text)
             {
                 Console.Write(c);
-                System.Threading.Thread.Sleep(speed);
+                if (delay > 0)
+                {
+                    if (SkipRequested())
+                        delay = 0;
+                    else
+                        System.Threading.Thread.Sleep(delay);
+                }
             }
+            Console.WriteLine();
+        }
+
+        public static void PrintColor(string text, ConsoleColor color, int speed = 40)
+        {
+            Console.ForegroundColor = color;
+            Print(text, speed);
+            Console.ResetColor();
+        }
+
+        static bool SkipRequested()
+        {
+            try
+            {
+                if (Console.KeyAvailable)
+                {
+                    Console.ReadKey(true);
+                    return true;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+               
+            }
+            return false;
+        }
+
+        public static void Pause()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("[press any key]");
+            Console.ResetColor();
+            Console.ReadKey(true);
             Console.WriteLine();
         }
     }
